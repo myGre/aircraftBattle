@@ -1,0 +1,58 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+#root {
+	height: 100vh;
+	width: 500px;
+	background-color: rgb(0, 157, 255);
+	position: relative;
+	overflow: hidden;
+}
+
+/* 飞机 */
+.aircraft1 {
+	width: 100px;
+	height: 68px;
+	position: absolute;
+	z-index: 10;
+	background-image: url('../static/image/aircraft/4号.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+/* 子弹盒子样式 */
+.bulletsClass {
+	width: 100px;
+	height: 15px;
+	position: absolute;
+
+}
+
+/* 子弹 */
+.bullet {
+	position: absolute;
+	width: 5px;
+	height: 15px;
+	background-color: rgb(244, 47, 26);
+	border-radius: 20px;
+}
+
+/* 敌机 */
+#hostileBox {
+	position: relative;
+
+}
+
+.hostile1 {
+	width: 100px;
+	height: 73px;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: url('../static/image/aircraft/敌机.png') no-repeat;
+	background-size: 100%;
+}
