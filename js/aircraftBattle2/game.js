@@ -8,8 +8,8 @@
 	// 初始化游戏
 	Game.prototype.init = function (map) {
 		console.log('初始化游戏对象', this);
-		this.aircraft.init(map)
 		this.positionAircraft.init(map)
+		this.aircraft.init(map, this.positionAircraft)
 		this.rouAircraft(map)
 	}
 	// 触摸移动飞机
@@ -57,8 +57,8 @@
 	}
 	// 开始游戏
 	Game.prototype.start = function (map) {
-		this.aircraft.init(map)
 		this.positionAircraft.init(map)
+		this.aircraft.init(map, this.positionAircraft)
 		this.rouAircraft(map)
 	}
 	window.Game = Game

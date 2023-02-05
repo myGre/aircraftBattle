@@ -10,7 +10,7 @@
 		this.flag = false; // 控制飞机是否可以移动
 	}
 	// 初始化
-	Aircraft.prototype.init = function (map) {
+	Aircraft.prototype.init = function (map, positionAircraft) {
 		let aircraftBox = this.element
 		let aircraftElement = this.aircraftElement
 		let bullet = this.bullet
@@ -21,7 +21,7 @@
 		console.log('初始化飞机', this);
 
 		// 初始化子弹
-		bullet.init(this.aircraftLeftOrTop)
+		bullet.init(this.aircraftLeftOrTop, positionAircraft)
 		aircraftBox.appendChild(bullet.bulletElement);
 
 		map.appendChild(aircraftBox);
@@ -64,15 +64,15 @@
 		this.bullets = []; // 装子弹的数组
 		this.bulletsArrElement = []; // 装子弹元素的数组
 		this.bulletsLeftOrTop = {} // 子弹盒子当前的位置
-		this.number = 3; // 子弹数量
+		this.number = 2; // 子弹数量
 		this.bulletElement = document.createElement('div');
 		this.timer = ''; //子弹射击
 	}
 	// 初始化子弹
-	Bullet.prototype.init = function (bulletsLeftOrTop) {
+	Bullet.prototype.init = function (bulletsLeftOrTop, positionAircraft) {
 		this.setLeftOrTop(bulletsLeftOrTop)
 		this.setBulletNum()
-		this.setBullet()
+		this.setBullet(positionAircraft)
 	}
 	// 设置子弹盒子当前的位置
 	Bullet.prototype.setLeftOrTop = function (bulletsLeftOrTop) {
@@ -163,26 +163,59 @@
 
 	}
 	// 子弹射击
-	Bullet.prototype.setBullet = function () {
+	Bullet.prototype.setBullet = function (positionAircraft) {
 		this.timer = setInterval(() => {
 			let difference = Math.ceil(Math.random() * 10) + 30
 			this.setBulletNum(Math.ceil(Math.random() * 3))
 
 			this.bullets.forEach((item, index) => {
-				const element = this.bulletsArrElement[index];
-				element.style.top = (this.bullets[index][0].bulletTop - difference) + 'px'
-				item.forEach(item => {
-					item.bulletTop -= difference
+				const bulletsArrElement = this.bulletsArrElement[index];
+
+				item.forEach((element, i) => {
+					element.bulletTop -= difference
+					let bulletLeft = element.bulletLeft
+					let bulletTop = element.bulletTop
+
+					if (!positionAircraft.hostileArrly.length) {
+						return
+					}
+					positionAircraft.hostileArrly.forEach((e, p) => {
+						// 敌机的位置属性
+						let height = e.height, left = e.left, top = e.top, right = e.right
+
+						if (left < bulletLeft && bulletLeft < right && bulletTop > (top - height) && bulletTop < top) {
+							// element.children[i].style.display = 'none'
+							bulletsArrElement.removeChild(bulletsArrElement.children[i])
+							item.splice(i, 1)
+							e.number += 1
+							if (e.number > e.maxNumber) {
+								positionAircraft.clearAircraft(p)
+							}
+						}
+					})
 				})
-				if (this.bullets[index][0].bulletTop < -60) {
-					this.bulletElement.removeChild(this.bulletElement.children[index])
-					this.bulletsArrElement.shift()
-					this.bullets.shift()
+
+				if (item.length) {
+					bulletsArrElement.style.top = (item[0].bulletTop) + 'px'
+					// 子弹射出外界
+					if (item[0].bulletTop < -60) {
+						this.clearBullet(index)
+						this.bulletElement.removeChild(this.bulletElement.children[index])
+						// debugger
+					}
+				} else {
+					this.clearBullet(index)
+
 				}
 			})
-			console.log('bullets', this.bullets);
-			console.log('bulletsArrElement', this.bulletsArrElement);
+			// console.log('bullets', this.bullets);
+			// console.log('bulletsArrElement', this.bulletsArrElement);
 		}, 100)
+	}
+	// 清除子弹
+	Bullet.prototype.clearBullet = function (index) {
+		this.bulletsArrElement.splice(index, 1)
+		this.bullets.splice(index, 1)
 	}
 	// 停止射击
 	Bullet.prototype.stop = function () {

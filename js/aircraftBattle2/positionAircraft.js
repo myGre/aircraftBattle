@@ -26,9 +26,10 @@
 		element.appendChild(hostileElement)
 		// 初始化敌机出现位置
 		let left = Math.random() * (bodyWidth - hostileElement.offsetWidth)
-		hostileElement.style.top = (-hostileElement.offsetTop) + 'px';
+		hostileElement.style.top = (-hostileElement.offsetHeight) + 'px';
 		hostileElement.style.left = left + 'px';
-		this.hostileArrly.push({ top: (-hostileElement.offsetTop + hostileElement.offsetHeight), left, right: left + hostileElement.offsetWidth })
+		let maxNumber = Math.ceil(Math.random() * 50)
+		this.hostileArrly.push({ top: (-hostileElement.offsetHeight + hostileElement.offsetHeight), left, right: left + hostileElement.offsetWidth, height: hostileElement.offsetHeight, number: 0, maxNumber })
 		this.hostileElementArrly.push(hostileElement)
 	}
 	// 敌机运动轨迹
@@ -40,11 +41,8 @@
 		this.createTimer = setInterval(() => {
 			this.setStyle(map)
 		}, 3000)
-
 		// 敌机运动
 		this.timer = setInterval(() => {
-			console.log('hostileArrly', this.hostileArrly);
-			console.log('hostileElement', this.hostileElementArrly);
 			this.hostileArrly.forEach((item, index) => {
 				let hostileElement = hostileElementArrly[index]
 				let difference = hostileElement.offsetHeight / 30
@@ -52,12 +50,16 @@
 
 				hostileElement.style.top = (item.top - hostileElement.offsetHeight) + 'px'
 				if (item.top > bodyHeight) {
-					this.hostileArrly.splice(index, 1)
-					this.element.removeChild(this.element.children[index])
-					this.hostileElementArrly.splice(index, 1)
+					this.clearAircraft(index)
 				}
 			});
 		}, 50)
+	}
+	// 清除敌机
+	PositionAircraft.prototype.clearAircraft = function (index) {
+		this.hostileArrly.splice(index, 1)
+		this.element.removeChild(this.element.children[index])
+		this.hostileElementArrly.splice(index, 1)
 	}
 	PositionAircraft.prototype.stop = function () {
 		clearInterval(this.createTimer)
