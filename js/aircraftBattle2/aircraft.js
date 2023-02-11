@@ -64,7 +64,7 @@
 		this.bullets = []; // 装子弹的数组
 		this.bulletsArrElement = []; // 装子弹元素的数组
 		this.bulletsLeftOrTop = {} // 子弹盒子当前的位置
-		this.number = 2; // 子弹数量
+		this.number = 3; // 子弹数量
 		this.bulletElement = document.createElement('div');
 		this.timer = ''; //子弹射击
 	}

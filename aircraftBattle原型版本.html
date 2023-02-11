@@ -7,11 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>飞机大战</title>
   <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/btnClass.css">
 </head>
 
 <body>
   <div id="root">
-    <button class="stopOrStart">停止</button>
+    <div class="stopOrStartDiv">
+      <button class="stopOrStart">停止</button>
+    </div>
+    <!-- 游戏开始页面 -->
+    <div class="gamePage">
+      <button class="common-btn start"><span>开始游戏</span></button>
+    </div>
+    <!-- <div class="gamePage">
+      <button class="stopOrStart">停止</button>
+    </div> -->
     <!-- 敌机 -->
     <div id="hostileBox">
       <!-- <div class="hostile">
@@ -27,11 +37,19 @@
   <script src="./js/aircraftBattle2/game.js"></script>
   <script>
     const map = document.querySelector('#root') // 整个页面
+    const start = document.querySelector('.start'); // 开启游戏
+    const gamePage = document.querySelector('.gamePage');
     const stopOrStart = document.querySelector('.stopOrStart') //停止或开始游戏
+    const stopOrStartDiv = document.querySelector('.stopOrStartDiv')
 
     // 开启游戏
     let game = new Game()
-    game.init(map)
+    start.addEventListener('click', (e) => {
+      gamePage.style.display = 'none'
+      stopOrStartDiv.style.display = 'block'
+      game.init(map)
+    })
+    // 暂停或继续
     stopOrStart.addEventListener('click', (e) => {
       if (stopOrStart.innerHTML == '停止') {
         game.stop()
@@ -39,9 +57,9 @@
       } else if (stopOrStart.innerHTML == '继续') {
         game.start(map)
         stopOrStart.innerHTML = '停止'
-
       }
     })
+
   </script>
 </body>
 
